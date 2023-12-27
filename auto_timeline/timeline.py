@@ -3,8 +3,13 @@
 # Automatic transcription of audio file (ENGLISH); - DONE
 # Writing the transcription to a subtitle file (.ass) - DONE
 # Correcting the subtitle output in accordance to manual transcriptions provided should there be any
-# Direct use from CLI; should implement options
-# Setting subtitle styles - font, font size, etc
+# Direct use from CLI; options to implement:
+#   manual transcription - True or false. Is there any?
+#   model - specify which model is to use for the Whisper auto transcript.
+#   language - this specification will determine the --language argument for openai-whisper
+#   subtitle styles - font, font size, etc
+#   overriding the assertion that a file is "not supported" and send it to ffmpeg anyways
+#   format - the format of subtitle output. Default woult be .ass; some formats may not support styles...
 
 #   Bonus goal: writing the transcription to an Arctime Project file (.atpj) which is based on JSON
 
@@ -17,6 +22,10 @@ import subprocess
 
 
 def assess_media_format(media_dir:str) -> str:
+
+    """
+    This function returns one of string values "audio", "video" or "other" according to the extension name of a file.
+    """
 
     # A list of commonly seen audio formats
     aud_extension_names = ["pcm", "wav", "mp3", "flac", "ogg"]  # It is welcomed to add more to this list.
@@ -32,15 +41,23 @@ def assess_media_format(media_dir:str) -> str:
         return "other"
 
 def extract_audio(video_dir: str):
-    # extracting audio from video file with ffmpeg, saving it to a local directory.
-    # extracted wav matches the requirements of openai-whisper
+
+    """
+    Extracting audio from video file with ffmpeg, saving it to a local directory.
+    Extracted wav matches the requirements of openai-whisper.
+    """
+
     extraction_command = ["ffmpeg", "-i", video_dir, "-map", "0:a", "-acodec", "pcm_s16le", "-ar", "16000",
                           "-ac", "1", "-f", "wav", "audio_temp.wav"]
     subprocess.run(extraction_command)
 
 
-# Transcribing audio with openai-whisper, and convert the transcript to the pysubs2 subtitle object.
 def generate_subtitles(media_dir:str, model:whisper.Whisper) -> pysubs2.SSAFile:
+
+    """
+    Transcribing audio with openai-whisper, and convert the transcript to the pysubs2 subtitle object.
+    """
+
     auto_text = model.transcribe(media_dir, verbose=True)
     return pysubs2.load_from_whisper(auto_text)
 

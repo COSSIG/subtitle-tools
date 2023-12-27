@@ -166,6 +166,17 @@ cython_debug/
 *.flac
 *.m4a
 
+# video files
+*.mp4
+*.avi
+*.mkv
+*.flv
+*.mpeg
+*.mov
+*.wmv
+*.rmvb
+*.m4v
+
 # subtitle files or subtitle project files
 *.srt
 *.ass

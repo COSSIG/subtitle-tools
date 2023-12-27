@@ -34,4 +34,4 @@ Repository dedicated to storing subtitle related scripts &amp; tools. Some would
 
 妥善安装以上三者之后，`timeline.py` 才能够运行。注意 openai-whisper 本身依赖于 ffmpeg 和 rust。
 
-在第一次运行本工具时，程序可能会先下载语言识别模型。这会耗费一些时间。
+在第一次运行本工具时，程序可能会先下载语音识别模型。这会耗费一些时间。
